@@ -1,0 +1,48 @@
+@use "../../styles/colors";
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0.5rem 1.5rem;
+
+  font-size: 1.125rem;
+  font-weight: 600;
+  // letter-spacing: 1.2px;
+  // white-space: nowrap;
+
+  color: colors.$white;
+  background-color: colors.$cucohealth-red;
+  border: 2px solid colors.$cucohealth-red;
+  border-radius: 0.25rem;
+
+  transition: color 0.3s, background-color 0.3s;
+
+  &:hover:not(:disabled) {
+    color: colors.$cucohealth-red;
+    background-color: colors.$white;
+  }
+
+  &.success {
+    color: colors.$white;
+    background-color: colors.$cucohealth-green;
+    border: 2px solid colors.$cucohealth-green;
+
+    &:hover:not(:disabled) {
+      color: colors.$cucohealth-green;
+      background-color: colors.$white;
+    }
+  }
+
+  &.plain {
+    color: colors.$gray-500;
+    background: none;
+    border: none;
+
+    &:hover:not(:disabled) {
+      // color: colors.$red;
+      background: none;
+    }
+  }
+}

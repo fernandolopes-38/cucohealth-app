@@ -1,0 +1,22 @@
+@use "../../styles/colors";
+
+.header {
+  height: 16rem;
+
+  padding: 2rem;
+
+  background-color: colors.$cucohealth-blue;
+
+  h1 {
+    margin-top: 4rem;
+
+    font-family: "Roboto";
+    font-weight: 700;
+    color: colors.$white;
+  }
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+}

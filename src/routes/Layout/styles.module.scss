@@ -1,0 +1,13 @@
+@use "../../styles/colors";
+
+.container {
+  max-width: 1120px;
+  width: 100%;
+
+  margin: 0 auto;
+
+  main {
+    padding: 0 2rem;
+    margin-top: -16px;
+  }
+}
