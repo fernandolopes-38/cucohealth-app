@@ -13,7 +13,6 @@ Esse projeto é um desafio proposto pela Cuco Healt. É uma aplicação web para
 
 - [Axios](https://github.com/axios/axios)
 - [Testing-library](https://testing-library.com/)
-- [Redux](https://redux.js.org/)
 - [SASS](https://sass-lang.com/)
 - [React-router-dom](https://reactrouter.com/en/main)
 

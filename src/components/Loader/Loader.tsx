@@ -10,7 +10,7 @@ interface LoaderProps {
 export const Loader: React.FC<LoaderProps> = ({
   className = "",
   color = "#ffffff",
-  size = 15,
+  size = 20,
 }) => {
   return (
     <svg

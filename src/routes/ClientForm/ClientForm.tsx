@@ -131,7 +131,6 @@ export const ClientForm: React.FC = () => {
               value={phone}
               onChange={(e) => setPhone(phoneMask(e.target.value))}
               pattern="^\(\d{2}\) \d{5}-\d{4}$"
-              required
             />
           </div>
         </fieldset>
@@ -142,7 +141,12 @@ export const ClientForm: React.FC = () => {
               Cancelar
             </Button>
           </Link>
-          <Button type="submit" theme="success" loading={state === "loading"}>
+          <Button
+            type="submit"
+            theme="success"
+            width={106}
+            loading={state === "submitting"}
+          >
             Salvar
           </Button>
         </footer>

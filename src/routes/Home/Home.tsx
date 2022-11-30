@@ -11,9 +11,10 @@ import styles from "./styles.module.scss";
 
 export const Home: React.FC = () => {
   const [pageIndex, setPageIndex] = useState(1);
-  const [pageLimit, setPageLimit] = useState(10);
+  const [pageLimit, setPageLimit] = useState(7);
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState("");
+  const [clientsCount, setClientsCount] = useState(1);
 
   const inuputRef = useRef<HTMLInputElement>(null);
 
@@ -22,15 +23,22 @@ export const Home: React.FC = () => {
   let url = `/clients?_page=${pageIndex}&_limit=${pageLimit}${filter}`;
   console.log(url);
 
-  const { response } = useFetch<{
+  const { response, isLoading } = useFetch<{
     data: User[];
     headers: RawAxiosResponseHeaders | AxiosResponseHeaders;
   }>(url);
 
-  const totalPages = response ? Number(response?.headers["x-total-count"]) : 1;
+  useEffect(() => {
+    if (response) {
+      setClientsCount(Number(response?.headers["x-total-count"]));
+    }
+  }, [response]);
+
+  const totalPages = Math.ceil(clientsCount / pageLimit);
 
   useEffect(() => {
     if (debouncedSearchTerm) {
+      setPageIndex(1);
       if (parseInt(debouncedSearchTerm)) {
         setFilter(`&cpf_like=${debouncedSearchTerm}`);
         return;
@@ -38,6 +46,7 @@ export const Home: React.FC = () => {
       setFilter(`&name_like=${debouncedSearchTerm}`);
       return;
     }
+    setPageIndex(1);
     setFilter("");
   }, [debouncedSearchTerm]);
 
@@ -56,6 +65,10 @@ export const Home: React.FC = () => {
     setSearchTerm(value);
   };
 
+  const handlePageChange = (pageToGo: number) => {
+    setPageIndex(pageToGo);
+  };
+
   return (
     <div>
       <Input
@@ -71,9 +84,12 @@ export const Home: React.FC = () => {
       <div className={styles.tableContainer}>
         <Table
           data={response?.data}
+          totalCount={clientsCount}
           totalPages={totalPages}
-          pageLimit={pageLimit}
+          pageSize={pageLimit}
           pageIndex={pageIndex}
+          onPageChange={handlePageChange}
+          loading={isLoading}
         />
       </div>
     </div>
