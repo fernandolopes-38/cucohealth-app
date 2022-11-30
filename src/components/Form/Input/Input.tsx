@@ -1,25 +1,28 @@
-import React, { InputHTMLAttributes } from "react";
+import { forwardRef, InputHTMLAttributes, ReactNode } from "react";
 import styles from "./styles.module.scss";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
   width?: number | string;
+  icon?: ReactNode;
 }
 
-export const Input: React.FC<InputProps> = ({
-  label,
-  width,
-  error,
-  ...props
-}) => {
-  return (
-    <div className={`${styles.container} ${error ? styles.error : ""}`}>
-      {label && <label htmlFor={label}>{label}</label>}
+export const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ label, width, error, icon, ...props }, ref) => {
+    return (
+      <div
+        className={`${styles.container} ${error ? styles.error : ""} ${
+          icon ? styles.icon : ""
+        }`}
+      >
+        {label && <label htmlFor={label}>{label}</label>}
 
-      <input id={label ?? ""} style={{ width }} {...props} />
+        <input ref={ref} id={label ?? ""} style={{ width }} {...props} />
 
-      {error && <span>{error}</span>}
-    </div>
-  );
-};
+        {icon && <span className={styles.icon}>{icon}</span>}
+        {error && <span>{error}</span>}
+      </div>
+    );
+  }
+);

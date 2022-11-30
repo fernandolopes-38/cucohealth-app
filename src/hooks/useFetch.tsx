@@ -8,15 +8,17 @@ export function useFetch<Data = AxiosResponse, Error = AxiosError>(
   const { data, error, mutate } = useSWR<Data, Error>(
     url,
     async (url: string) => {
-      const response = await api.get(url);
-      const { data, headers } = response;
-      console.log(headers.link);
-      const pagination = {
-        total: headers["x-total-count"],
-      };
-      console.log(pagination);
-      return data;
+      // const response = await api.get(url);
+      // const { data, headers } = response;
+      // responseHeaders = headers;
+      // console.log(headers.link);
+      // const pagination = {
+      //   total: headers["x-total-count"],
+      // };
+      // const totalPages = Number(headers["x-total-count"]);
+      // console.log(totalPages);
+      return await api.get(url);
     }
   );
-  return { data, error, mutate };
+  return { response: data, error, mutate };
 }

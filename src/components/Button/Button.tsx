@@ -8,6 +8,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   loading?: boolean;
   theme?: "success" | "plain";
   className?: string;
+  icon?: ReactNode;
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -16,15 +17,19 @@ export const Button: React.FC<ButtonProps> = ({
   children,
   theme = "primary",
   className = "",
+  icon,
   ...props
 }) => {
   return (
     <button
-      className={`${styles.button} ${styles[theme]} ${className}`}
+      className={`${styles.button} ${styles[theme]} ${className} ${
+        icon ? styles.icon : ""
+      }`}
       style={{ width }}
       disabled={loading}
       {...props}
     >
+      {icon && <span className={styles.icon}>{icon}</span>}
       {loading ? <Loader /> : children}
     </button>
   );

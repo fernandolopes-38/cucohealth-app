@@ -1,6 +1,6 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { ClientForm } from "./routes/ClientForm";
+import { ClientForm, loader, action } from "./routes/ClientForm";
 import { Home } from "./routes/Home";
 import { Layout } from "./routes/Layout";
 
@@ -15,10 +15,13 @@ const router = createBrowserRouter([
       {
         path: "/client-form",
         element: <ClientForm />,
+        action,
       },
       {
         path: "/client-form/:id",
         element: <ClientForm />,
+        loader,
+        action,
       },
     ],
   },

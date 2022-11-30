@@ -1,41 +1,22 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useAppSelector } from "../../store/hooks";
-import { selectUsersFetchStatus } from "../../store/usersSlice";
-import { User } from "../../types";
+import { formatDateLong } from "../../utils/helpers.utils";
 import { Button } from "../Button";
+import { EditIcon } from "../Icons/EditIcon";
 import styles from "./styles.module.scss";
 
 interface TableProps {
   data: any[] | undefined;
+  totalPages: number;
+  pageLimit: number;
+  pageIndex: number;
 }
-export const Table: React.FC<TableProps> = ({ data }) => {
-  // const fetchStatus = useAppSelector(selectUsersFetchStatus);
-  // const dispatch = useAppDispatch();
-
-  // const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  // const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  // const [currentEmployee, setCurrentEmployee] = useState<User>();
-
-  // const handleDeleteClick = (employee: User) => {
-  //   setCurrentEmployee(employee);
-  //   setIsDeleteModalOpen(true);
-  // };
-
-  // const handleEditClick = async (employee: User) => {
-  //   setCurrentEmployee(employee);
-  //   setIsEditModalOpen(true);
-  // };
-
-  // const handleEditEmployee = async (data: FormData) => {
-  //   await dispatch(updateUser({ userId: currentEmployee!._id, user: data }));
-  //   setIsEditModalOpen(false);
-  // };
-  // const handleDeleteEmployee = () => {
-  //   dispatch(deleteUser(currentEmployee!._id));
-  //   setIsDeleteModalOpen(false);
-  // };
-
+export const Table: React.FC<TableProps> = ({
+  data,
+  totalPages,
+  pageLimit,
+  pageIndex,
+}) => {
   return (
     <div data-testid="users-table" className={styles.table__container}>
       <table>
@@ -89,18 +70,15 @@ export const Table: React.FC<TableProps> = ({ data }) => {
             <tr key={datum.id}>
               <td></td>
               <td>
-                <p>{datum.name}</p>
-                <p>{datum.cpf}</p>
+                <p className={styles.main__text}>{datum.name}</p>
+                <p className={styles.secondary__text}>{datum.cpf}</p>
               </td>
-              <td>{datum.birthdate}</td>
+              <td>{formatDateLong(datum.birthdate)}</td>
               <td>{datum.phone}</td>
               <td>
                 <div className={styles.flex__center}>
                   <Link to={`/client-form/${datum.id}`}>
-                    <Button
-                      theme="success"
-                      // onClick={() => handleEditClick(datum)}
-                    >
+                    <Button theme="success" icon={<EditIcon />}>
                       Edit
                     </Button>
                   </Link>
@@ -111,7 +89,33 @@ export const Table: React.FC<TableProps> = ({ data }) => {
         </tbody>
       </table>
 
-      <div></div>
+      <footer>
+        <div>
+          <span>
+            <strong>
+              {pageLimit * (pageIndex - 1) + 1} -{" "}
+              {pageLimit + (pageIndex - 1) * pageLimit}
+            </strong>{" "}
+            de <strong>{totalPages}</strong>
+          </span>
+        </div>
+
+        <div className={styles.pageCount}>
+          <span>
+            <strong>{pageIndex}</strong>
+          </span>
+        </div>
+      </footer>
     </div>
   );
 };
+
+interface PagesResultsProps {
+  size: number;
+  index: number;
+  total: number;
+}
+const PagesResults: React.FC<PagesResultsProps> = ({ size, index, total }) => {
+  return <></>;
+};
+const Pagination = () => {};

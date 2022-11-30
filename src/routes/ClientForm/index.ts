@@ -1,1 +1,1 @@
-export { ClientForm } from "./ClientForm";
+export { ClientForm, loader, action } from "./ClientForm";

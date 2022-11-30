@@ -1,8 +1,9 @@
-export const startDateMask = (value: string): string =>
+export const dateMask = (value: string): string =>
   value
     .replace(/\D/g, "")
-    .replace(/^(\d{2})\/?(\d{1,4})/, "$1/$2")
-    .replace(/^(\d{2})\/(\d{4})(\d{0,})$/, "$1/$2");
+    .replace(/^(\d{2})(\d{1,2})/, "$1/$2")
+    .replace(/(\d{2})(\d{1,4})/, "$1/$2")
+    .replace(/^(\d{2})\/(\d{2})\/(\d{4})(\d{0,})$/, "$1/$2/$3");
 
 export const cpfMask = (value: string): string => {
   value = value.replace(/\D/g, "");
@@ -13,3 +14,14 @@ export const cpfMask = (value: string): string => {
 };
 
 export const cpfUnmask = (value: string): string => value.replace(/\-|\./g, "");
+
+export const phoneMask = (value: string): string => {
+  if (!value) return "";
+  return value
+    .replace(/\D/g, "")
+    .replace(/(\d{2})(\d)/, "($1) $2")
+    .replace(/(\d{5})(\d)/, "$1-$2");
+};
+
+export const phoneUnmask = (value: string): string =>
+  value.replace(/\-| |\(|\)/g, "");

@@ -16,8 +16,16 @@ export const validateCpf = (cpf: string): boolean => {
   return rest(10) === values[9] && rest(11) === values[10];
 };
 
-export const validateStartDate = (date: string): boolean => {
-  const [month, year] = date.split("/");
+export const validateBirtdate = (birthdate: string): boolean => {
+  const date = new Date(`${birthdate}T00:00`);
+  if (!(date instanceof Date && !isNaN(date.valueOf()))) return false;
+
+  let now = new Date();
+  const currentYear = now.getFullYear();
+  const [year, month, day] = birthdate.split("-");
+
+  if (parseInt(year) >= currentYear) return false;
+  if (parseInt(day) > 31 || parseInt(day) === 0) return false;
   if (parseInt(month) > 12 || parseInt(month) === 0) return false;
   return true;
 };

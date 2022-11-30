@@ -1,6 +1,7 @@
 @use "../../styles/colors";
 
 .button {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -19,9 +20,21 @@
 
   transition: color 0.3s, background-color 0.3s;
 
+  &.icon {
+    span.icon {
+      margin-right: 8px;
+    }
+  }
+
   &:hover:not(:disabled) {
     color: colors.$cucohealth-red;
     background-color: colors.$white;
+
+    svg {
+      path {
+        fill: colors.$white;
+      }
+    }
   }
 
   &.success {
@@ -32,6 +45,12 @@
     &:hover:not(:disabled) {
       color: colors.$cucohealth-green;
       background-color: colors.$white;
+
+      svg {
+        path {
+          fill: colors.$cucohealth-green;
+        }
+      }
     }
   }
 
