@@ -6,7 +6,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
   width?: number;
   loading?: boolean;
-  theme?: "success" | "plain";
+  theme?: "success" | "plain" | "danger";
   className?: string;
   icon?: ReactNode;
 }

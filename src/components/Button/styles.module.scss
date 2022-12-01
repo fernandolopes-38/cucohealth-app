@@ -14,25 +14,27 @@
   // white-space: nowrap;
 
   color: colors.$white;
-  background-color: colors.$cucohealth-red;
-  border: 2px solid colors.$cucohealth-red;
-  border-radius: 0.25rem;
+  background-color: colors.$cucohealth-pink;
+  border: 2px solid colors.$cucohealth-pink;
+  border-radius: 6px;
 
   transition: color 0.3s, background-color 0.3s;
 
   &.icon {
     span.icon {
+      width: 14px;
+      height: 14px;
       margin-right: 8px;
     }
   }
 
   &:hover:not(:disabled) {
-    color: colors.$cucohealth-red;
+    color: colors.$cucohealth-pink;
     background-color: colors.$white;
 
     svg {
       path {
-        fill: colors.$white;
+        fill: colors.$cucohealth-pink;
       }
     }
   }
@@ -54,8 +56,25 @@
     }
   }
 
+  &.danger {
+    color: colors.$white;
+    background-color: colors.$cucohealth-red;
+    border: 2px solid colors.$cucohealth-red;
+
+    &:hover:not(:disabled) {
+      color: colors.$cucohealth-red;
+      background-color: colors.$white;
+
+      svg {
+        path {
+          fill: colors.$cucohealth-red;
+        }
+      }
+    }
+  }
+
   &.plain {
-    color: colors.$gray-500;
+    color: colors.$gray-400;
     background: none;
     border: none;
 

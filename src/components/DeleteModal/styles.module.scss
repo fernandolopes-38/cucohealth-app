@@ -1,0 +1,33 @@
+@use "../../styles/colors";
+
+.container {
+  width: 400px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  margin-top: 0.5rem;
+
+  text-align: center;
+
+  h3 {
+    font-family: "Inter";
+    font-weight: 400;
+    font-size: 14px;
+    color: colors.$gray-500;
+  }
+
+  div.buttons__container {
+    width: 100%;
+    display: flex;
+    gap: 0.75rem;
+
+    margin-top: 1.5rem;
+
+    button {
+      width: 100%;
+      font-size: 14px;
+    }
+  }
+}

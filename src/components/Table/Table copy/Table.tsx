@@ -1,18 +1,13 @@
-import React, { useState, ChangeEvent } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { User } from "../../types";
-import { formatDateLong } from "../../utils/helpers.utils";
-import { Button } from "../Button";
-import { DeleteModal } from "../DeleteModal";
-import { Checkbox } from "../Form/Checkbox";
-import { DeleteIcon } from "../Icons/DeleteIcon";
-import { EditIcon } from "../Icons/EditIcon";
-import { Modal } from "../Modal";
-import { Skeleton } from "../Skeleton";
+import { formatDateLong } from "../../../utils/helpers.utils";
+import { Button } from "../../Button";
+import { EditIcon } from "../../Icons/EditIcon";
+import { Skeleton } from "../../Skeleton";
 import styles from "./styles.module.scss";
 
 interface TableProps {
-  data: User[];
+  data: any[] | undefined;
   totalCount: number;
   totalPages: number;
   pageSize: number;
@@ -29,66 +24,24 @@ export const Table: React.FC<TableProps> = ({
   onPageChange,
   loading,
 }) => {
-  const [rowsChecked, setRowsChecked] = useState<string[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const checked = event.currentTarget.checked;
-    const value = event.currentTarget.value;
-    if (checked) {
-      if (value === "all") {
-        setRowsChecked(data?.map((datum) => datum.id));
-        return;
-      }
-      setRowsChecked([...rowsChecked, value]);
-      return;
-    }
-    if (value === "all") {
-      setRowsChecked([]);
-      return;
-    }
-    setRowsChecked((state) => state.filter((item) => item !== value));
-  };
-
-  const handleDeleteClient = () => {
-    console.log(" delete");
-  };
-
   return (
     <div data-testid="users-table" className={styles.table__container}>
       <table>
-        <colgroup>
-          <col width="9%" />
-          <col width="44%" />
-          <col width="22%" />
-          <col width="15%" />
+        {/* <colgroup>
           <col width="25%" />
-        </colgroup>
+          <col width="31%" />
+          <col width="15%" />
+          <col width="15%" />
+          <col width="7%" />
+          <col width="7%" />
+        </colgroup> */}
         <thead>
           <tr>
-            <th>
-              <Checkbox
-                value="all"
-                checked={rowsChecked.length === data?.length}
-                onChange={handleCheckboxChange}
-              />
-            </th>
+            {/* <th></th> */}
             <th>NOME</th>
             <th>DATA DE NASCIMENTO</th>
             <th>TELEFONE</th>
-            <th className={styles.flex__center}>
-              <div className={styles.flex__center}>
-                {!!rowsChecked.length && (
-                  <Button
-                    theme="danger"
-                    icon={<DeleteIcon />}
-                    onClick={() => setIsModalOpen(true)}
-                  >
-                    Excluir
-                  </Button>
-                )}
-              </div>
-            </th>
+            <th className={styles.flex__center}></th>
           </tr>
         </thead>
         <tbody>
@@ -96,9 +49,9 @@ export const Table: React.FC<TableProps> = ({
           {loading && !data?.length
             ? Array.from({ length: pageSize }).map((_, index) => (
                 <tr key={`${index}-row`}>
-                  <td className={styles.skeleton__container}>
-                    <Skeleton width="45%" height={24} />
-                  </td>
+                  {/* <td className={styles.skeleton__container}>
+                    <Skeleton width="75%" height={24} />
+                  </td> */}
                   <td className={styles.skeleton__container}>
                     <Skeleton width="75%" height={22} />
                     <Skeleton width="30%" height={20} />
@@ -121,13 +74,7 @@ export const Table: React.FC<TableProps> = ({
               )}
           {data?.map((datum) => (
             <tr key={datum.id}>
-              <td>
-                <Checkbox
-                  value={datum.id}
-                  checked={rowsChecked.indexOf(datum.id) >= 0}
-                  onChange={handleCheckboxChange}
-                />
-              </td>
+              {/* <td></td> */}
               <td>
                 <p className={styles.main__text}>{datum.name}</p>
                 <p className={styles.secondary__text}>{datum.cpf}</p>
@@ -138,7 +85,7 @@ export const Table: React.FC<TableProps> = ({
                 <div className={styles.flex__center}>
                   <Link to={`/client-form/${datum.id}`}>
                     <Button theme="success" icon={<EditIcon />}>
-                      Editar
+                      Edit
                     </Button>
                   </Link>
                 </div>
@@ -161,18 +108,6 @@ export const Table: React.FC<TableProps> = ({
           onPageChange={onPageChange}
         />
       </footer>
-
-      <Modal
-        title="Atencão"
-        isOpen={isModalOpen}
-        onRequestClose={() => setIsModalOpen(false)}
-      >
-        <DeleteModal
-          text="Você tem certeza que quer excluir os cliente(s) selecionado(s)?"
-          onDeleteClick={() => handleDeleteClient()}
-          onCancelClick={() => setIsModalOpen(false)}
-        />
-      </Modal>
     </div>
   );
 };

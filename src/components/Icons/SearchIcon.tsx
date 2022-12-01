@@ -1,8 +1,6 @@
 import React from "react";
 
-interface SearchIconProps {}
-
-export const SearchIcon: React.FC<SearchIconProps> = ({}) => {
+export const SearchIcon: React.FC = () => {
   return (
     <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
       <path

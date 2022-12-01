@@ -1,8 +1,6 @@
 import React from "react";
 
-interface EditIconProps {}
-
-export const EditIcon: React.FC<EditIconProps> = ({}) => {
+export const EditIcon: React.FC = () => {
   return (
     <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
       <path

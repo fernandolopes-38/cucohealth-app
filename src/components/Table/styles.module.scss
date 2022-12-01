@@ -8,6 +8,16 @@
     border-spacing: 0 1rem;
     width: inherit;
 
+    .flex__center {
+      display: flex;
+      justify-content: center;
+    }
+
+    button {
+      padding: 6px 12px;
+      font-size: 14px;
+    }
+
     thead {
       text-align: left;
       white-space: nowrap;
@@ -15,16 +25,17 @@
       font-family: "Poppins";
       font-size: 13px;
       font-weight: 600;
-      color: colors.$gray-500;
+      color: colors.$gray-400;
       // background-color: colors.$light-blue;
 
       tr {
         th {
+          line-height: 2.75;
           font-weight: 600;
 
-          // &:first-child {
-          //   // padding-left: 0.5rem;
-          // }
+          &:first-child {
+            padding-left: 30px;
+          }
 
           &.align__center {
             text-align: center;
@@ -35,14 +46,16 @@
 
     tbody {
       font-family: "Poppins";
-      color: colors.$gray-500;
+      color: colors.$gray-400;
       white-space: nowrap;
 
       tr {
         background-color: colors.$white;
         td {
           padding: 1rem 0;
+
           font-size: 16px;
+
           font-weight: 400;
 
           .main__text {
@@ -66,23 +79,13 @@
           &:first-child {
             border-top-left-radius: 5px;
             border-bottom-left-radius: 5px;
-            padding-left: 0.5rem;
+            padding-left: 30px;
           }
           &:last-child {
             border-top-right-radius: 5px;
             border-bottom-right-radius: 5px;
           }
-
-          .flex__center {
-            display: flex;
-            justify-content: center;
-          }
         }
-      }
-
-      button {
-        padding: 0.4rem 0.8rem;
-        font-size: 0.75rem;
       }
     }
   }
@@ -100,7 +103,7 @@
       font-family: "Poppins";
       font-size: 13px;
       font-weight: 400;
-      color: colors.$gray-500;
+      color: colors.$gray-400;
     }
 
     strong {
@@ -116,6 +119,7 @@
       }
 
       button.pageButton {
+        line-height: 1.25;
         font-size: 12px;
         border: none;
         background: none;
