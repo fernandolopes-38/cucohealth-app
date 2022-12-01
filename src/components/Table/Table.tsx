@@ -13,6 +13,7 @@ import { EditIcon } from "../Icons/EditIcon";
 import { Modal } from "../Modal";
 import { Skeleton } from "../Skeleton";
 import styles from "./styles.module.scss";
+import { TablePageCount } from "./TablePageCount";
 import { TablePagination } from "./TablePagination";
 
 interface TableProps {
@@ -72,7 +73,6 @@ export const Table: React.FC<TableProps> = ({
 
     // const promises: Promise<any>[] = [];
     // rowsChecked.map((clientId) => {
-    //   console.log(clientId);
     //   const clienteDeletePromise = api.delete(`/clients/${clientId}`);
     //   promises.push(clienteDeletePromise);
     // });
@@ -185,7 +185,7 @@ export const Table: React.FC<TableProps> = ({
 
       {!!data.length && (
         <footer>
-          <PagesResults
+          <TablePageCount
             pageSize={pageSize}
             currentPage={pageIndex}
             totalCount={totalCount}
@@ -210,43 +210,6 @@ export const Table: React.FC<TableProps> = ({
           onCancelClick={() => setIsModalOpen(false)}
         />
       </Modal>
-    </div>
-  );
-};
-
-interface PagesResultsProps {
-  currentPage: number;
-  pageSize: number;
-  totalCount: number;
-}
-const PagesResults: React.FC<PagesResultsProps> = ({
-  pageSize,
-  currentPage,
-  totalCount,
-}) => {
-  const startRow = pageSize * (currentPage - 1) + 1;
-  const endRow = startRow - 1 + pageSize;
-
-  if (endRow < totalCount) {
-    return (
-      <div>
-        <span>
-          <strong>
-            {pageSize * (currentPage - 1) + 1} - {endRow}
-          </strong>{" "}
-          de <strong>{totalCount}</strong>
-        </span>
-      </div>
-    );
-  }
-  return (
-    <div>
-      <span>
-        <strong>
-          {pageSize * (currentPage - 1) + 1} - {totalCount}
-        </strong>{" "}
-        de <strong>{totalCount}</strong>
-      </span>
     </div>
   );
 };

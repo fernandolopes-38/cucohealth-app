@@ -5,18 +5,28 @@ import styles from "./styles.module.scss";
 
 interface SelectElementProps {
   options: Option[];
+  defaultValue?: number | string;
   width?: number | string;
   backgroundColor?: string;
   onChange: (option: number | string) => void;
 }
 
 export const Select: React.FC<SelectElementProps> = ({
-  options = [],
+  options,
+  defaultValue,
   width,
   backgroundColor,
   onChange,
 }) => {
   const setFirstOption = (): Option => {
+    if (defaultValue) {
+      const deafultOption = options.find(
+        (option) => option.value === defaultValue
+      );
+      if (deafultOption) {
+        return deafultOption;
+      }
+    }
     if (options.length) {
       return options[0];
     }

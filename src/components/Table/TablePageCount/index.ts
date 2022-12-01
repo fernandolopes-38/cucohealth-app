@@ -1,0 +1,1 @@
+export { TablePageCount } from "./TablePageCount";

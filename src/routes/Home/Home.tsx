@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Input } from "../../components/Form/Input";
 import { SearchIcon } from "../../components/Icons/SearchIcon";
 import { Select } from "../../components/Select";
@@ -10,9 +11,17 @@ import { cpfMask } from "../../utils/masks.utils";
 import styles from "./styles.module.scss";
 
 export const Home: React.FC = () => {
-  const [pageIndex, setPageIndex] = useState(1);
-  const [pageLimit, setPageLimit] = useState(7);
-  const [searchTerm, setSearchTerm] = useState("");
+  let [searchParams, setSearchParams] = useSearchParams();
+
+  const searchIndex = searchParams.get("index")
+    ? Number(searchParams.get("index"))
+    : 1;
+  const searchSize = searchParams.get("size")
+    ? Number(searchParams.get("size"))
+    : 5;
+  const searchTermParam = searchParams.get("term") ?? "";
+
+  const [searchTerm, setSearchTerm] = useState(searchTermParam);
   const [filter, setFilter] = useState("");
   const [clientsCount, setClientsCount] = useState(1);
 
@@ -20,8 +29,7 @@ export const Home: React.FC = () => {
 
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
-  let url = `/clients?_page=${pageIndex}&_limit=${pageLimit}${filter}`;
-  console.log(url);
+  let url = `/clients?_page=${searchIndex}&_limit=${searchSize}${filter}`;
 
   const { response, mutate, isLoading } = useFetch<UsersResponse>(url);
 
@@ -29,18 +37,21 @@ export const Home: React.FC = () => {
     if (response) {
       const totalClients = Number(response?.headers["x-total-count"]);
       setClientsCount(totalClients);
-      const totalPages = Math.ceil(totalClients / pageLimit);
-      if (pageIndex > totalPages) {
-        setPageIndex(totalPages);
+      const totalPages = Math.ceil(totalClients / searchSize);
+
+      if (searchIndex > totalPages) {
+        searchParams.set("index", String(totalPages));
+        setSearchParams(searchParams);
       }
     }
   }, [response]);
 
-  const totalPages = Math.ceil(clientsCount / pageLimit);
+  const totalPages = Math.ceil(clientsCount / searchSize);
 
   useEffect(() => {
     if (debouncedSearchTerm) {
-      setPageIndex(1);
+      searchParams.set("index", "1");
+      setSearchParams(searchParams);
       if (parseInt(debouncedSearchTerm)) {
         setFilter(`&cpf_like=${debouncedSearchTerm}`);
         return;
@@ -48,8 +59,9 @@ export const Home: React.FC = () => {
       setFilter(`&name_like=${debouncedSearchTerm}`);
       return;
     }
-    setPageIndex(1);
     setFilter("");
+    searchParams.delete("term");
+    setSearchParams(searchParams);
   }, [debouncedSearchTerm]);
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -68,10 +80,12 @@ export const Home: React.FC = () => {
   };
 
   const handlePageChange = (pageToGo: number) => {
-    setPageIndex(pageToGo);
+    searchParams.set("index", String(pageToGo));
+    setSearchParams(searchParams);
   };
   const handlePageLimitChange = (pageSize: number | string) => {
-    setPageLimit(pageSize as number);
+    searchParams.set("size", pageSize as string);
+    setSearchParams(searchParams);
   };
 
   return (
@@ -90,6 +104,7 @@ export const Home: React.FC = () => {
         <span>Items por página:</span>
         <Select
           width={60}
+          defaultValue={searchSize}
           onChange={handlePageLimitChange}
           options={[
             { value: 5, label: "5" },
@@ -105,8 +120,8 @@ export const Home: React.FC = () => {
           data={response?.data ?? []}
           totalCount={clientsCount}
           totalPages={totalPages}
-          pageSize={pageLimit}
-          pageIndex={pageIndex}
+          pageSize={searchSize}
+          pageIndex={searchIndex}
           onPageChange={handlePageChange}
           loading={isLoading}
           clientsMutation={mutate}

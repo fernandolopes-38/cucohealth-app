@@ -109,35 +109,5 @@
     strong {
       font-weight: 600;
     }
-
-    .pageCount {
-      display: flex;
-      gap: 5px;
-
-      span {
-        user-select: none;
-      }
-
-      button.pageButton {
-        line-height: 1.25;
-        font-size: 12px;
-        border: none;
-        background: none;
-        cursor: pointer;
-        padding: 4px 8px;
-
-        transition: color 0.3s;
-
-        &:hover {
-          color: colors.$black;
-        }
-      }
-      button.active {
-        color: colors.$white;
-        pointer-events: none;
-        background-color: colors.$cucohealth-blue;
-        border-radius: 6px;
-      }
-    }
   }
 }
