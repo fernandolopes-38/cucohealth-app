@@ -8,6 +8,7 @@ import {
   useFetcher,
   useLoaderData,
 } from "react-router-dom";
+import { toast } from "react-toastify";
 import { Button } from "../../components/Button";
 import { Input } from "../../components/Form/Input";
 import { api } from "../../services/api";
@@ -47,17 +48,21 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   if (params.id) {
     try {
       await api.put(`/clients/${params.id}`, body);
+      toast.success("Informações do clente atualizadas.");
       return redirect("/");
     } catch (error: any) {
       const responseError: AxiosError = error.response.data;
+      toast.error(responseError.message);
       return responseError;
     }
   }
   try {
     await api.post("/clients", body);
+    toast.success("Cliente adicionado.");
     return redirect("/");
   } catch (error: any) {
     const responseError: AxiosError = error.response.data;
+    toast.error(responseError.message);
     return responseError;
   }
 };

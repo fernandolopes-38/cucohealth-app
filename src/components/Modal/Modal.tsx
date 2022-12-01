@@ -1,5 +1,6 @@
 import React, { ReactNode, useEffect, useState, AnimationEvent } from "react";
 import styles from "./styles.module.scss";
+import Illustration from "../../assets/Illustration.png";
 
 interface ModalProps {
   children?: ReactNode;
@@ -38,6 +39,8 @@ export const Modal: React.FC<ModalProps> = ({
         onAnimationEnd={handleAnimationEnd}
       >
         <header>
+          <img src={Illustration} alt="Warning sign" />
+
           <h2>{title}</h2>
         </header>
 

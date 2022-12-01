@@ -1,6 +1,9 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { Link } from "react-router-dom";
-import { User } from "../../types";
+import { toast } from "react-toastify";
+import { KeyedMutator } from "swr";
+import { api } from "../../services/api";
+import { User, UsersResponse } from "../../types";
 import { formatDateLong } from "../../utils/helpers.utils";
 import { Button } from "../Button";
 import { DeleteModal } from "../DeleteModal";
@@ -10,6 +13,7 @@ import { EditIcon } from "../Icons/EditIcon";
 import { Modal } from "../Modal";
 import { Skeleton } from "../Skeleton";
 import styles from "./styles.module.scss";
+import { TablePagination } from "./TablePagination";
 
 interface TableProps {
   data: User[];
@@ -19,6 +23,7 @@ interface TableProps {
   pageIndex: number;
   onPageChange: (pageInde: number) => void;
   loading?: boolean;
+  clientsMutation: KeyedMutator<UsersResponse>;
 }
 export const Table: React.FC<TableProps> = ({
   data,
@@ -28,6 +33,7 @@ export const Table: React.FC<TableProps> = ({
   pageIndex,
   onPageChange,
   loading,
+  clientsMutation,
 }) => {
   const [rowsChecked, setRowsChecked] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -50,12 +56,41 @@ export const Table: React.FC<TableProps> = ({
     setRowsChecked((state) => state.filter((item) => item !== value));
   };
 
-  const handleDeleteClient = () => {
-    console.log(" delete");
+  const handleDeleteClient = async () => {
+    try {
+      for (let clientId of rowsChecked) {
+        await api.delete(`/clients/${clientId}`);
+      }
+      setRowsChecked([]);
+      toast.success("Cliente(s) exlcuidos com sucesso.");
+      clientsMutation();
+    } catch (error) {
+      toast.error("Erro ao tentar excluir Cliente(s).");
+    } finally {
+      setIsModalOpen(false);
+    }
+
+    // const promises: Promise<any>[] = [];
+    // rowsChecked.map((clientId) => {
+    //   console.log(clientId);
+    //   const clienteDeletePromise = api.delete(`/clients/${clientId}`);
+    //   promises.push(clienteDeletePromise);
+    // });
+
+    // try {
+    //   await Promise.allSettled(promises);
+    //   setRowsChecked([]);
+    //   toast.success("Cliente(s) exlcuidos com sucesso.");
+    //   clientsMutation();
+    // } catch (error: any) {
+    //   toast.error("Erro ao tentar excluir Cliente(s).");
+    // } finally {
+    //   setIsModalOpen(false);
+    // }
   };
 
   return (
-    <div data-testid="users-table" className={styles.table__container}>
+    <div data-testid="clients-table" className={styles.table__container}>
       <table>
         <colgroup>
           <col width="9%" />
@@ -69,7 +104,7 @@ export const Table: React.FC<TableProps> = ({
             <th>
               <Checkbox
                 value="all"
-                checked={rowsChecked.length === data?.length}
+                checked={rowsChecked.length === data?.length && !!data?.length}
                 onChange={handleCheckboxChange}
               />
             </th>
@@ -116,7 +151,7 @@ export const Table: React.FC<TableProps> = ({
               ))
             : !data?.length && (
                 <tr>
-                  <td colSpan={4}>No clients....</td>
+                  <td colSpan={5}>No clients....</td>
                 </tr>
               )}
           {data?.map((datum) => (
@@ -148,19 +183,21 @@ export const Table: React.FC<TableProps> = ({
         </tbody>
       </table>
 
-      <footer>
-        <PagesResults
-          pageSize={pageSize}
-          currentPage={pageIndex}
-          totalCount={totalCount}
-        />
+      {!!data.length && (
+        <footer>
+          <PagesResults
+            pageSize={pageSize}
+            currentPage={pageIndex}
+            totalCount={totalCount}
+          />
 
-        <Pagination
-          currentPage={pageIndex}
-          lastPage={totalPages}
-          onPageChange={onPageChange}
-        />
-      </footer>
+          <TablePagination
+            currentPage={pageIndex}
+            lastPage={totalPages}
+            onPageChange={onPageChange}
+          />
+        </footer>
+      )}
 
       <Modal
         title="Atencão"
@@ -210,178 +247,6 @@ const PagesResults: React.FC<PagesResultsProps> = ({
         </strong>{" "}
         de <strong>{totalCount}</strong>
       </span>
-    </div>
-  );
-};
-
-interface PaginationProps {
-  currentPage: number;
-  lastPage: number;
-  onPageChange: (pageInde: number) => void;
-}
-const Pagination: React.FC<PaginationProps> = ({
-  currentPage,
-  lastPage,
-  onPageChange,
-}) => {
-  const RenderFirstButton = () => {
-    if (currentPage > 3) {
-      return (
-        <>
-          <button className={styles.pageButton} onClick={() => onPageChange(1)}>
-            <strong>1</strong>
-          </button>
-          <span>
-            <strong>...</strong>
-          </span>
-        </>
-      );
-    }
-
-    return (
-      <button
-        className={`${styles.pageButton} ${
-          currentPage === 1 ? styles.active : ""
-        }`}
-        onClick={() => onPageChange(1)}
-      >
-        <strong>1</strong>
-      </button>
-    );
-  };
-
-  const RenderLastButton = () => {
-    if (lastPage === 1) return null;
-    if (lastPage - currentPage > 2) {
-      return (
-        <>
-          <span>
-            <strong>...</strong>
-          </span>
-          <button
-            className={styles.pageButton}
-            onClick={() => onPageChange(lastPage)}
-          >
-            <strong>{lastPage}</strong>
-          </button>
-        </>
-      );
-    }
-    return (
-      <button
-        className={`${styles.pageButton} ${
-          currentPage === lastPage ? styles.active : ""
-        }`}
-        onClick={() => onPageChange(lastPage)}
-      >
-        <strong>{lastPage}</strong>
-      </button>
-    );
-  };
-
-  const RenderMiddleButtons = () => {
-    if (lastPage === 1) return null;
-
-    if (lastPage === 2) {
-      return null;
-    }
-    if (lastPage - currentPage === 0) {
-      return (
-        <button
-          className={styles.pageButton}
-          onClick={() => onPageChange(currentPage - 1)}
-        >
-          <strong>{currentPage - 1}</strong>
-        </button>
-      );
-    }
-    if (lastPage - currentPage === 1 && lastPage > 3) {
-      return (
-        <>
-          <button
-            className={styles.pageButton}
-            onClick={() => onPageChange(currentPage - 1)}
-          >
-            <strong>{currentPage - 1}</strong>
-          </button>
-          <button
-            className={`${styles.pageButton} ${styles.active}`}
-            onClick={() => onPageChange(currentPage)}
-          >
-            <strong>{currentPage}</strong>
-          </button>
-        </>
-      );
-    }
-    if (currentPage > 2) {
-      return (
-        <>
-          <button
-            className={styles.pageButton}
-            onClick={() => onPageChange(currentPage - 1)}
-          >
-            <strong>{currentPage - 1}</strong>
-          </button>
-          <button
-            className={`${styles.pageButton} ${styles.active}`}
-            onClick={() => onPageChange(currentPage)}
-          >
-            <strong>{currentPage}</strong>
-          </button>
-
-          <button
-            className={styles.pageButton}
-            onClick={() => onPageChange(currentPage + 1)}
-          >
-            <strong>{currentPage + 1}</strong>
-          </button>
-        </>
-      );
-    }
-    if (currentPage > 1 && lastPage > 3) {
-      return (
-        <>
-          <button
-            className={`${styles.pageButton} ${styles.active}`}
-            onClick={() => onPageChange(currentPage)}
-          >
-            <strong>{currentPage}</strong>
-          </button>
-
-          <button
-            className={styles.pageButton}
-            onClick={() => onPageChange(currentPage + 1)}
-          >
-            <strong>{currentPage + 1}</strong>
-          </button>
-        </>
-      );
-    }
-    if (currentPage > 1 && lastPage === 3) {
-      return (
-        <button
-          className={`${styles.pageButton} ${styles.active}`}
-          onClick={() => onPageChange(currentPage)}
-        >
-          <strong>{currentPage}</strong>
-        </button>
-      );
-    }
-    return (
-      <button
-        className={styles.pageButton}
-        onClick={() => onPageChange(currentPage + 1)}
-      >
-        <strong>{currentPage + 1}</strong>
-      </button>
-    );
-  };
-
-  return (
-    <div className={styles.pageCount}>
-      <RenderFirstButton />
-      <RenderMiddleButtons />
-      <RenderLastButton />
     </div>
   );
 };

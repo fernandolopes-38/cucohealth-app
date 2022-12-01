@@ -10,7 +10,7 @@ describe("UsersTable", () => {
   it("should render UsersTable component", () => {
     renderRegistrationForm([]);
 
-    expect(screen.getByTestId("users-table")).toBeInTheDocument();
+    expect(screen.getByTestId("clients-table")).toBeInTheDocument();
   });
 
   it("should show empty array message if there are no clients", () => {

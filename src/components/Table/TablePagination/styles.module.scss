@@ -1,0 +1,38 @@
+@use "../../../styles/colors";
+
+.pageCount {
+  display: flex;
+  gap: 5px;
+
+  span {
+    user-select: none;
+  }
+
+  strong {
+    font-weight: 600;
+  }
+
+  button.pageButton {
+    font-family: "Poppins";
+    font-size: 12px;
+    font-weight: 400;
+    color: colors.$gray-400;
+
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 4px 8px;
+
+    transition: color 0.3s;
+
+    &:hover {
+      color: colors.$gray-900;
+    }
+  }
+  button.active {
+    color: colors.$white;
+    pointer-events: none;
+    background-color: colors.$cucohealth-blue;
+    border-radius: 6px;
+  }
+}

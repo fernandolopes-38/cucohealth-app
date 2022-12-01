@@ -1,5 +1,18 @@
 @use "../../styles/colors";
 
 .tableContainer {
-  margin-top: 52px;
+  margin-top: 10px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  span {
+    font-family: "Inter";
+    font-size: 14px;
+  }
+
+  margin-top: 12px;
 }

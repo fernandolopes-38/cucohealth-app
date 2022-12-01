@@ -1,11 +1,11 @@
-import { AxiosResponseHeaders, RawAxiosResponseHeaders } from "axios";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { Input } from "../../components/Form/Input";
 import { SearchIcon } from "../../components/Icons/SearchIcon";
+import { Select } from "../../components/Select";
 import { Table } from "../../components/Table";
 import { useDebounce } from "../../hooks/useDebounce";
 import { useFetch } from "../../hooks/useFetch";
-import { User } from "../../types";
+import { UsersResponse } from "../../types";
 import { cpfMask } from "../../utils/masks.utils";
 import styles from "./styles.module.scss";
 
@@ -23,14 +23,16 @@ export const Home: React.FC = () => {
   let url = `/clients?_page=${pageIndex}&_limit=${pageLimit}${filter}`;
   console.log(url);
 
-  const { response, isLoading } = useFetch<{
-    data: User[];
-    headers: RawAxiosResponseHeaders | AxiosResponseHeaders;
-  }>(url);
+  const { response, mutate, isLoading } = useFetch<UsersResponse>(url);
 
   useEffect(() => {
     if (response) {
-      setClientsCount(Number(response?.headers["x-total-count"]));
+      const totalClients = Number(response?.headers["x-total-count"]);
+      setClientsCount(totalClients);
+      const totalPages = Math.ceil(totalClients / pageLimit);
+      if (pageIndex > totalPages) {
+        setPageIndex(totalPages);
+      }
     }
   }, [response]);
 
@@ -68,6 +70,9 @@ export const Home: React.FC = () => {
   const handlePageChange = (pageToGo: number) => {
     setPageIndex(pageToGo);
   };
+  const handlePageLimitChange = (pageSize: number | string) => {
+    setPageLimit(pageSize as number);
+  };
 
   return (
     <div>
@@ -81,15 +86,30 @@ export const Home: React.FC = () => {
         onChange={handleSearchChange}
       />
 
+      <div className={styles.row}>
+        <span>Items por página:</span>
+        <Select
+          width={60}
+          onChange={handlePageLimitChange}
+          options={[
+            { value: 5, label: "5" },
+            { value: 10, label: "10" },
+            { value: 25, label: "25" },
+            { value: 50, label: "50" },
+          ]}
+        />
+      </div>
+
       <div className={styles.tableContainer}>
         <Table
-          data={response?.data}
+          data={response?.data ?? []}
           totalCount={clientsCount}
           totalPages={totalPages}
           pageSize={pageLimit}
           pageIndex={pageIndex}
           onPageChange={handlePageChange}
           loading={isLoading}
+          clientsMutation={mutate}
         />
       </div>
     </div>
