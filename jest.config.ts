@@ -5,7 +5,8 @@ export default {
     ".+\\.scss$": "jest-css-modules-transform",
   },
   moduleNameMapper: {
-    ".(css|less|sass|scss)$": "identity-obj-proxy",
+    "\\.(css|less|sass|scss)$": "identity-obj-proxy",
+    "\\.(jpg|jpeg|png)$": "identity-obj-proxy",
   },
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
 };

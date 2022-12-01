@@ -15,13 +15,29 @@ Esse projeto é um desafio proposto pela Cuco Healt. É uma aplicação web para
 - [Testing-library](https://testing-library.com/)
 - [SASS](https://sass-lang.com/)
 - [React-router-dom](https://reactrouter.com/en/main)
+- [SWR](https://swr.vercel.app/)
 
 ## Use and Setup
+
+### Clone o repositório
+
+```
+$ git clone https://github.com/fernandolopes-38/cucohealth-app.git
+$ cd cucohealth-app
+```
 
 Rodar comando yarn para instalar as dependências:
 
 ```bash
 yarn
+```
+
+Clonar e Rodar a API de clientes da CUCOHealth [API](https://github.com/developercuco/cucohealth-client-api)
+
+Criar um arquivo .dnv na raiz do projeto e passar o valor da url da api para a variável VITE_API_URL
+
+```bash
+VITE_API_URL=http://exlampe.com
 ```
 
 Rodar o projeto localmente:

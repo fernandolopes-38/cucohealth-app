@@ -6,15 +6,15 @@ describe("Input", () => {
   it("should render Input component", () => {
     render(<Checkbox />);
 
-    expect(screen.getByRole("textbox")).toBeInTheDocument();
+    expect(screen.getByRole("checkbox")).toBeInTheDocument();
   });
 
-  it("should change value on type", async () => {
-    render(<Checkbox defaultValue="Hello," />);
-    const input = screen.getByRole("textbox");
+  it("should change checked value on click", async () => {
+    render(<Checkbox />);
+    const input = screen.getByRole("checkbox");
 
-    await userEvent.type(input, " World!");
+    await userEvent.click(input);
 
-    expect(input).toHaveValue("Hello, World!");
+    expect(input).toBeChecked();
   });
 });
